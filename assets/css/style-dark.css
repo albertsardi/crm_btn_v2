@@ -1,0 +1,97 @@
+/* 
+  CRM Dark style
+  for BTN
+*/
+
+.color-brown {background-color: rgb(144,101,74);}
+
+.navbar-custom {
+  background-color: black;
+}
+
+.headerbar .headerbar-left{
+  background: rgb(20,20,20);
+}
+
+.main-sidebar{
+  background-color: rgb(20,20,20);
+}
+
+.content {
+  background-color: rgb(50,50,50);
+}
+
+.breadcrumb-holder {
+  color: white;
+  background-color: rgb(50,50,50);
+}
+
+.card {
+  color: gray;
+  background-color: rgb(36,36,36);
+}
+
+.card-header, .card-footer {
+  color: white;
+}
+
+.headerbar .headerbar-left {
+  height:70px;
+}
+
+/* logo */
+.headerbar .headerbar-left .logo img {
+  max-width:200px;
+  max-height:30px;
+}
+
+#sidebar-menu > ul > li > a:hover {
+  color: #FFF;
+  background-color: rgb(144,101,74);
+}
+
+div.text-muted{
+  color: lightgray !important; 
+}
+
+a { 
+  color: rgb(144,101,74);font-weight:bold;
+}
+
+/* form input small */
+.form-control {
+  /* background-color: red; */
+}
+.form-control-sm {
+  color: white;
+  background-color: rgb(50,50,50);
+  border-color: rgb(68,65,65);
+}
+
+/* form-select2 */
+.select2-selection {
+  color: white;
+  background-color: rgb(50,50,50) !important;
+}
+
+.btn-primary {
+  background-color: rgb(144,101,74);
+  border-color: rgb(144,101,74);
+}
+
+.input-group-text {
+  color: white !important;
+  background-color: rgb(144,101,74) !important;
+  border-color: rgb(144,101,74) !important;
+}
+#find {
+  color: white !important;
+  background-color: rgb(144,101,74) !important;
+  border-color: rgb(144,101,74) !important;
+}
+
+.line-spliter {border-top: 1px solid gray;}
+
+
+
+
