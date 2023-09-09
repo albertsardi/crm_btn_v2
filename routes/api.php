@@ -20,9 +20,7 @@ Route::prefix('api')->group(function() {
     });
 
     // form load
-    Route::get('{db}/{id?}', function (){
-        return '{db}/{id?}';
-    });
+    Route::get('{db}/{id?}', 'ApiController@getData');
 
     // Route::prefix('{db}')->group(function () {
     //     Route::get('delete/{id?}', 'ApiController@delete');

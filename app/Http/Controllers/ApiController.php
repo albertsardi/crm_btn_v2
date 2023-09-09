@@ -24,7 +24,7 @@ class ApiController extends Controller {
 	function getdata($db, $id='', Request $req) {
 		//$id='';
 		//return json_encode($db);
-		return json_encode($id)."-XXX';
+		//return json_encode($id)."-XXX';
 		try {
 			if (!empty($id)) {
 				if (in_array($db, ['email_address', 'phone_number'])) {

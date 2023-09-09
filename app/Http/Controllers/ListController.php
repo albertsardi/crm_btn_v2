@@ -90,9 +90,13 @@ class ListController extends MainController {
         
         if($view=='datalist') {
             //get data
+            $host = 'http://localhost/crm_btn_dev4/';
             $grid = [];
-            $res = $this->api('GET', "api/$jr");
+            //$res = $this->api('GET', $host."api/$jr");
+            $res = $this->api('GET', "api/account");
+            return dd($res);
             $res = $this->gridModifiedValue($jr, $res);
+             dd($res);
             $data['grid'] = $this->createListGrid($res, $gridcol, $gridcaption, $jr, 'table table-dark table-datalist');
         
             
