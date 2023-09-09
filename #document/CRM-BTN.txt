@@ -1,4 +1,7 @@
 #contoh ambil di
 http://192.168.26.30:90/crm.btn/#Account/create
 user: naomimisa30@gmail.com
-pass: 12345678
+pass:  P4ssw0rd
+
+user: admin
+pass:  P4ssw0rd
