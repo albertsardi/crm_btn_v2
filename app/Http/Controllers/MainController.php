@@ -56,7 +56,7 @@ class MainController extends Controller {
 			//dd( $base_url.$url);
 
 			$api = $client->request($type, $base_url.$url); //ini yang jalan
-			return dd($base_url.$url);
+			//return dd($base_url.$url);
 			$res    = json_decode($api->getBody());
 
 			//$client = new GuzzleHttp\Client(['base_uri' => 'http://localhost:8000']);
