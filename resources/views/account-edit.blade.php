@@ -37,6 +37,9 @@
                     {{ Form::textwlookup('AccSellNo', 'Income Account No', 'modal-account') }}
                     {{ Form::textwlookup('AccInventoryNo', 'Inventory Account No', 'modal-account') }} --}}
 
+                    <?php echo json_encode($data);?>
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                    <input type="xhidden" name="id" value="{{$data->id??''}}" />
                     <div class='form-row'>
                         <div class="form-group col">
                             <label>Name *</label>
@@ -291,9 +294,9 @@
             //save data
             $("button#cmSave").click(async function(e){ //using ajax
                 e.preventDefault();
+                alert('saving ...');
                 var formdata=$('form').serialize();
-                var id = '{{$id}}';
-                var resp = await axios.post("{{env('API_URL')}}/api/account/save/"+id, formdata);
+                var resp = await axios.post("{{env('API_URL')}}/api/account/save", formdata);
                 console.log(resp)
                 if (resp.status==200) {
                     console.log(resp.data)

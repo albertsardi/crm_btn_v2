@@ -5,6 +5,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('api')->group(function() {
 
+    // data save
+    // // {{env('API_URL')}}/api/account/save/"+id, formdata);
+    //Route::post('{db}/{id?}', function () {
+        // Route::get('{db}/save', function ($db,$id='') {
+        //     return 'ApiController@savedata';
+        // });  
+
+        Route::post('{db}/save', 'ApiController@savedata');
+        
     // data delete
     Route::get('{db}/delete/{id?}', function() {
         return 'ApiController@deletedata';
@@ -14,10 +23,9 @@ Route::prefix('api')->group(function() {
     Route::get('select/{jr}', function() {
         return 'MainController@selectData';
     });
-    // data save
-    Route::post('{db}/{id?}', function () {
-        return 'ApiController@savedata';
-    });
+
+    // common load
+    Route::get('common/{id?}', 'ApiController@getCommon');
 
     // form load
     Route::get('{db}/{id?}', 'ApiController@getData');
