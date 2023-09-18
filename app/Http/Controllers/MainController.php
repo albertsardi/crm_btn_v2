@@ -182,7 +182,7 @@ class MainController extends Controller {
 						$rr = explode(':', $r); 
 						$type = $rr[1];
 						$dat = [];
-						$res = $this->api('GET', "api/common?category=$type");
+						$res = $this->api('GET', "api/common/$type");
 						if(!empty($res)) {
 							foreach($res as $r) {
 								$dat[] = ['id'=>$r->opttext, 'text'=>$r->opttext];

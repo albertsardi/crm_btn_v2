@@ -3,15 +3,19 @@
 namespace App\Http\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+
 
 class Account extends Model
 {
     protected $table = 'account';
+	public $timestamps = false; //disable time stamp
     // protected $primaryKey = '';
-    // protected $keyType = 'string';
+    protected $keyType = 'string';
     //const CREATED_AT = 'CreatedDate'; //change laravel timestamp
-    const UPDATED_AT = 'Modified_at'; //change laravel creator stamp
+    //const UPDATED_AT = 'Modified_at'; //change laravel creator stamp
     protected $fillable = [
+					'id',
 					'name',
 					'cif',
 					'segmentation',
@@ -50,6 +54,14 @@ class Account extends Model
 					'objective_investment',
 					'objective_other', 
 	];
+
+	protected static function boot() {
+        static::creating(function ($model) {
+            if ( ! $model->getKey()) {
+                $model->{$model->getKeyName()} = (string) Str::uuid();
+            }
+        });
+    }
 
 }
 

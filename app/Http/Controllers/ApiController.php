@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
 use App\Http\Model\Account;
@@ -21,16 +22,79 @@ use App\Http\Model\Phone;
 class ApiController extends Controller {
 	
 	// api for read data from database
-	function getdata($db, $id='', Request $req) {
-		//$id='';
+	function getdata($db,  $id='', Request $req) {
+		$opt = $req->all();
+		if($db=='common') {
+			$data = DB::table($db);
+			$key = array_keys($opt); 
+			$v = $opt->$key; return $v;
+			$data = $data->where($key, $v)->get();
+			return response()->json($data, Response::HTTP_OK);
+		}
+		switch($db) {
+			case 'lead':
+			case 'call':
+			case 'task':
+				$data = $data->select("$db.*",'user.name as assigned_user_name');
+				$data = $data->leftJoin('user', 'user.id', '=', "$db.assigned_user_id");
+				break;
+			case 'contact':
+				$data = $data->select("$db.*", 'ea.name AS email_address', 'pn.name AS phone_number');
+				$data = $data->leftJoin('email_address as ea', 'ea.id', '=', 'contact.id');
+				$data = $data->leftJoin('phone_number as pn', 'pn.id', '=', 'contact.id');
+				$data = $data->where('ea.primary',1)->where('pn.primary',1);
+				break;
+			case 'opportunity':
+				$data = $data->select('opportunity.*','user.name as assigned_user_name','account.name as account_name');
+				$data = $data->leftJoin('user', 'user.id', '=', "$db.assigned_user_id");
+				$data = $data->leftJoin('account', 'account.id', '=', "$db.account_id");
+				break;
+			case 'case':
+				$data = $data->select('case.*','user.name as assigned_user_name','account.name as account_name');
+				$data = $data->leftJoin('user', 'user.id', '=', 'case.assigned_user_id');
+				$data = $data->leftJoin('account', 'account.id', '=', 'case.account_id');
+				break;
+			case 'meeting':
+				$data = $data->select("$db.*",'user.name as assigned_user_name','lead.name AS parent');
+				$data = $data->leftJoin('user', 'user.id', '=', "$db.assigned_user_id");
+				$data = $data->leftJoin('lead', 'lead.idx', '=', "$db.parent_idx");
+				break;
+			default:
+				$data = DB::table($db);	
+				
+		}
+
+		if (empty($id)) {//alldata
+			$data = DB::table($db);
+			
+		} else { //selected data
+			$data = DB::table($db)->where('id', $id);
+		}
+
+		$data = $data->where('deleted',0)->orderBy('created_at','desc');
+		$data = (empty($id))? $data->get() : $data->first();
+		//return $data->toSql();
+		//dd($data);
+
+		return response()->json($data, Response::HTTP_OK);
+	}
+
+	function getCommon($id) {
+		$data = DB::table('common');
+		$data = $data->where('category', $id)->get();
+		return response()->json($data, Response::HTTP_OK);
+	}
+
+	function getdata_lama($db,  Request $req) {
+		//return 'getdata';
 		//return json_encode($db);
-		//return json_encode($id)."-XXX';
+		//return ($id)."-XXX";
 		try {
 			if (!empty($id)) {
 				if (in_array($db, ['email_address', 'phone_number'])) {
 					$data = DB::table($db)
 							->where("$db.id", $id)
-							->get();
+							->first();
 					return response()->json($data, Response::HTTP_OK);
 				} else {
 					$data = DB::table($db)
@@ -55,7 +119,7 @@ class ApiController extends Controller {
 				}
 				*/
 				if ($db!='common') {
-					$data = $data->where($db.'.deleted',0)->orderBy($db.'.created_at','desc');
+					$data = $data->where('deleted',0)->orderBy('created_at','desc');
 					//$data = $data->leftJoin('user', 'user.id', '=', "$db.assigned_user_id");
 
 					switch($db) {
@@ -87,6 +151,8 @@ class ApiController extends Controller {
 							
 							$data = $data->leftJoin('lead', 'lead.idx', '=', "$db.parent_idx");
 							break;
+						default:
+							$data = DB::table($db);
 					}
 					
 				}
@@ -95,6 +161,7 @@ class ApiController extends Controller {
 					if(isset($opt['category'])) $data = $data->where('category',$opt['category']);
 				}
 				$data = $data->get();
+				//return $data->toSql();
 				//dd($data);
 
 				return response()->json($data, Response::HTTP_OK);
@@ -102,17 +169,18 @@ class ApiController extends Controller {
 		} catch(QueryException $e) {
 			$error = [ 'error'=>$e->getMessage() ];
 			return response()->json($error, Response::HTTP_INTERNAL_SERVER_ERROR);
-		}
+		}    
 	}
 
 	// api for savedata to database
 	function savedata($db, $id='', Request $req) {
 		// master data save 
-		return $this->responseOk(['data'=>'savedata']);    
+		//return 'save ...';
+		//return $this->responseOk(['data'=>'savedata','post'=>'$req']);    
 		$save = $req->all();
-		$save = $this->alterDateFormat($save);
-		unset($save['id']);
-		//dd($save);
+		//$save = $this->alterDateFormat($save);
+		//unset($save['id']);
+		//return dd($save);
 		
 		if ($db == 'account') $model = new Account;
 		if ($db == 'contact') {
@@ -146,14 +214,16 @@ class ApiController extends Controller {
 		if(!isset($model)) return $this->responseError(['error'=>"no save jr from $db "]);
 
 		try {
-			if (empty($id)) {
+			if (empty($req->id) ) {
 				// create new
+				$save['id'] = (string) Str::uuid();
+				//dd($save);
 				$data = $model->create($save);
-				$save['id'] = $data->id;
+				// $save['id'] = $data->id;
 			} else {
 				// update
 				//if($save['birth_date']=='') $save['birth_date']=NULL;
-				$data = $model->find($id)->update($save);
+				$data = $model->find($req->id)->update($save);
 			}
 			return $this->responseOk(['data'=>$save]);
 		}
@@ -188,13 +258,13 @@ class ApiController extends Controller {
 		$db= $model->where('id',$id)->first();
 
 		if (!empty($db)) {
-		try {
-			$data = $model->where('id',$id)->update(['deleted'=>1]);
-			return $this->responseOk(['data'=>$save]);
-		}
-		catch (Exception $e) {
-			return $this->responseError(['error'=>$e->getMessage()]);
-		}
+			try {
+				$data = $model->where('id',$id)->update(['deleted'=>1]);
+				return $this->responseOk(['data'=>$save]);
+			}
+			catch (Exception $e) {
+				return $this->responseError(['error'=>$e->getMessage()]);
+			}
 		} else return $this->responseError(['error'=>"no id $id from $db "]);
 	}
 
@@ -239,7 +309,7 @@ class ApiController extends Controller {
 		}
 	}
 
-	public function reportsummaryopportunity() {
+	function reportsummaryopportunity() {
 		// return dd('hoho..');
 		try {
 			$data = DB::table('common')
@@ -256,7 +326,7 @@ class ApiController extends Controller {
 		}
 	}
 
-	public function reportsummarylead() {
+	function reportsummarylead() {
 		// return dd('hoho..');
 		try {
 			/*$data = DB::table('common')
@@ -307,17 +377,12 @@ class ApiController extends Controller {
 	}
 
 	function responseOk($resp) {
-		return response()->json([
-			'status' => 'OK',
-			'data' => $resp['data']??''
-		]);
+		return response()->json(['status' => 'OK','data' => $resp['data']??'']);
 	}
 
 	function responseError($resp) {
-		return response()->json([
-			'status' => 'Error',
-			'message' => $resp['error']??''
-		]);
+		return response()->json(['status' => 'Error','message' => $resp['error']??'']);
 	}
 
 }
+
