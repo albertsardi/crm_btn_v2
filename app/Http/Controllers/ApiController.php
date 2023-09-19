@@ -97,6 +97,7 @@ class ApiController extends Controller {
 							->first();
 					return response()->json($data, Response::HTTP_OK);
 				} else {
+					$id = 
 					$data = DB::table($db)
 							->select("$db.*", 'u1.name as created_by_name', 'u2.name as assigned_user_name')
 							->leftJoin('user as u1', 'u1.id', '=', "$db.created_by_id") //created by name
@@ -216,7 +217,10 @@ class ApiController extends Controller {
 		try {
 			if (empty($req->id) ) {
 				// create new
-				$save['id'] = (string) Str::uuid();
+				$id= (string) Str::uuid();
+				$id = str_replace('-','',$id);
+				$id = substr($id,17);
+				$save['id'] = $id; 
 				//dd($save);
 				$data = $model->create($save);
 				// $save['id'] = $data->id;

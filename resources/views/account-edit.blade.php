@@ -37,7 +37,6 @@
                     {{ Form::textwlookup('AccSellNo', 'Income Account No', 'modal-account') }}
                     {{ Form::textwlookup('AccInventoryNo', 'Inventory Account No', 'modal-account') }} --}}
 
-                    <?php echo json_encode($data);?>
                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                     <input type="xhidden" name="id" value="{{$data->id??''}}" />
                     <div class='form-row'>
@@ -304,7 +303,8 @@
                         alert('Error:: '+resp.data.message);
                     } else {
                         alert('datasave.');
-                        if (id=='new' || id=='') window.location.href = window.location.href.replace("/new", "/"+resp.data.data.id);
+                        //if (id=='new' || id=='') window.location.href = window.location.href.replace("/new", "/"+resp.data.data.id);
+                        window.location.href.replace("google.com");
                     }
                 } else {
                     alert('Error')
