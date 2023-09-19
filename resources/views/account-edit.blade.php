@@ -296,15 +296,14 @@
                 alert('saving ...');
                 var formdata=$('form').serialize();
                 var resp = await axios.post("{{env('API_URL')}}/api/account/save", formdata);
-                console.log(resp)
+                console.log(resp.data.data.id)
                 if (resp.status==200) {
                     console.log(resp.data)
                     if (resp.data.status=='Error') {
                         alert('Error:: '+resp.data.message);
                     } else {
                         alert('datasave.');
-                        //if (id=='new' || id=='') window.location.href = window.location.href.replace("/new", "/"+resp.data.data.id);
-                        window.location.href.replace("google.com");
+                        window.open(window.location.href+"/"+resp.data.data.id,"_self");
                     }
                 } else {
                     alert('Error')
