@@ -8,6 +8,7 @@
     <div class='row mb-3'>
         <div class='col'> </div>
         <div class='col text-right'>
+            <a href='{{ url()->current()."/toPdf" }}' class='btn btn-sm btn-dark' style='width:150px;'>Export PDF</a>
             <a href='{{ url($jr).'/' }}' class='btn btn-sm btn-dark' style='width:150px;'>+ Create {{ Str::title($jr) }}</a>
         </div>
     </div>

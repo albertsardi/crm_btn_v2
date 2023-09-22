@@ -300,11 +300,16 @@
                 console.log(resp)
                 if (resp.status==200) {
                     console.log(resp.data)
+                    var formdata=resp.data.data;
+                    console.log(formdata.id);
                     if (resp.data.status=='Error') {
                         alert('Error:: '+resp.data.message);
                     } else {
                         alert('datasave.');
-                        if (id=='new' || id=='') window.location.href = window.location.href.replace("/new", "/"+resp.data.data.id);
+                        console.log(formdata);
+                        if window.location.href.includes('/new') { window.location.href = window.location.href.replace("/new", "/"+formdata.id); }
+                        //window.location.replace(window.location.href+'/'+formdata.id);
+                        window.location.replace('google.com');
                     }
                 } else {
                     alert('Error')

@@ -12,7 +12,10 @@ namespace App\Http\Controllers;
 // use SSP;
 // use Illuminate\Support\Facades\Input;
 use App\Http\Model\Product;
+use Dompdf\Dompdf;
 use Session;
+
+use PDF;
 
 class ListController extends MainController {
     var $cur = 'Rp';
@@ -117,6 +120,22 @@ class ListController extends MainController {
         }
         
         return $res;
+    }
+
+    function toPdf($jr) {
+        $data = [
+            'jr'        => $jr,
+        ];
+        $view = 'datalist';
+        $dompdf = new Dompdf();
+        $pdf = file_get_contents("resources/views/list-pdf.blade.php");
+        $dat=[];
+        $dat['title']='title PDF';
+        $dompdf->load_html($pdf);
+        $dompdf->setPaper('A4');
+        $dompdf->render();
+        $dompdf->stream('test.pdf');
+        
     }
 
 }
