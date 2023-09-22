@@ -18,7 +18,7 @@ class Account extends Model
 					'id',
 					'name',
 					'cif',
-					'segmentation',
+					/*'segmentation',
 					'email',
 					'phone',
 					'id_type',
@@ -52,16 +52,16 @@ class Account extends Model
 					'gross_income_yearly',
 					'expense_monthly',
 					'objective_investment',
-					'objective_other', 
+					'objective_other', */
 	];
 
-	protected static function boot() {
-        static::creating(function ($model) {
-            if ( ! $model->getKey()) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
+	// protected static function boot() {
+    //     static::creating(function ($model) {
+    //         if ( ! $model->getKey()) {
+    //             $model->{$model->getKeyName()} = (string) Str::uuid();
+    //         }
+    //     });
+    // }
 
 }
 

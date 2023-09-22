@@ -21,7 +21,10 @@ include('api.php');
     Route::view('/', 'dashboard', ['caption'=>'caption']);
     Route::view('dashboard', 'dashboard', ['caption'=>'caption']);
 
-    Route::get('list/{jr?}', 'ListController@datalist');
+    Route::get('list/{jr}', 'ListController@datalist');
+    
+    //to pdf
+    Route::get('list/{jr}/toPdf', 'ListController@toPdf');
     
     Route::get('account/{id?}', 'AccountController@edit');
     Route::get('contact/{id?}', 'ContactController@edit');

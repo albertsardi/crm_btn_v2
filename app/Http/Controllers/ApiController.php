@@ -173,7 +173,7 @@ class ApiController extends Controller {
 	}
 
 	// api for savedata to database
-	function savedata($db, $id='', Request $req) {
+	function savedata($db,  Request $req) {
 		// master data save 
 		//return 'save ...';
 		//return $this->responseOk(['data'=>'savedata','post'=>'$req']);    
@@ -181,6 +181,8 @@ class ApiController extends Controller {
 		//$save = $this->alterDateFormat($save);
 		//unset($save['id']);
 		//return dd($save);
+		//return json_encode([$db,$id,$req]);
+		//return $db;
 		
 		if ($db == 'account') $model = new Account;
 		if ($db == 'contact') {
@@ -216,7 +218,7 @@ class ApiController extends Controller {
 		try {
 			if (empty($req->id) ) {
 				// create new
-				$save['id'] = (string) Str::uuid();
+				$save['id'] = (string) Str::uuid(8);
 				//dd($save);
 				$data = $model->create($save);
 				// $save['id'] = $data->id;
