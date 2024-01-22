@@ -4,3 +4,8 @@ https://blog.xsis.academy/membuat-restful-api-dengan-laravel
 #contoh pusher tuk php
 https://nugasin.com/blog/detail/tutorial-integrasi-pusher-di-php
 https://www.youtube.com/watch?v=AUlbN_xsdXg
+
+#cara Install
+setelah git clone
+lalu git install..
+copy .env atau seting.env nya agar sesuai dengan datatabase
