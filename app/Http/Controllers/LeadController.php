@@ -20,9 +20,8 @@ class LeadController extends MainController {
     function edit($id='') {
         $data = [
             'id'        => $id,
-            'caption'   => 'Lead > '. (($id=='')? 'create':'edit'),
-            'select'    => $this->selectData(['common:gender', 'common:salutation_name', 'common:customer_category', 'common:id_type', 'common:fbi_percentage', 'common:probability']),
-            'lookup'    => $this->lookData(['user']),
+            'caption'   => 'Lead Edit',
+            'select'    => $this->selectData(['common:gender']),
             'data'      => []
         ];
 

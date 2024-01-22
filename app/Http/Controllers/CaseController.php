@@ -20,9 +20,8 @@ class CaseController extends MainController {
     function edit($id='') {
         $data = [
             'id'        => $id,
-            'caption'   => 'Case > '. (($id=='')? 'create':'edit'),
-            'select'    => $this->selectData(['common:gender', 'common:priority', 'common:case_status', 'common:type' ]),
-            'lookup'    => $this->lookData(['user']),
+            'caption'   => 'Case Edit',
+            'select'    => $this->selectData(['common:gender']),
             'data'      => []
         ];
 

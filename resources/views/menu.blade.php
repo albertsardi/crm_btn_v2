@@ -13,7 +13,7 @@
 		['Calls', 'fa fa-fw fa-phone', 'call'],
 		['Tasks', 'fa fa-fw fa-list-ul', 'task'],
 		['Stream', 'fa fa-fw fa-rss', 'stream'],
-		//['Reports', 'fa fa-fw fa-bar-chart-o', 'report'],
+		['Reports', 'fa fa-fw fa-bar-chart-o', 'report'],
 	];
 @endphp
 

@@ -20,22 +20,10 @@
     <link href="{{ asset('assets/css/ribbon.css') }}" rel="stylesheet" type="text/css" >
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet" type="text/css" >
     
+    
     <link href="{{ asset('assets/css/style-dark.css') }}" rel="stylesheet" type="text/css" >
     @yield('css')
     <!-- END CSS for this page -->
-    <script>
-        /*
-        function add_option() {
-            alert('dddddeeeee');
-            var id = $(this).attr('data-id');
-            console.log(id)
-            var count = $("input[name='"+id+"'].d-none").length;
-            var idx = 5 - count;
-            console.log(idx)
-            $("input[name='".id."']:eq("+idx+")").removeClass('d-none');
-        }
-        */
-    </script>
 </head>
 
 <!--<body class="adminbody widescreen" ng-controller="formCtrl">-->
@@ -59,7 +47,7 @@
 			    <div class="row">
 					<div class="col-xl-12">
                         <div class="breadcrumb-holder">
-                            <h1 class="main-title float-left">{{ $caption??'' }}</h1>
+                            <h1 class="main-title float-left">{{ $caption }}</h1>
                             <ol class="breadcrumb float-right">
                                 <li class="breadcrumb-item">Home</li>
                                 <li class="breadcrumb-item active">Forms</li>
@@ -146,8 +134,6 @@
 <script src="{{ asset('assets/plugin/fastclick.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/plugin/select2/select2.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/plugin/moment.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/plugin/axios/axios.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/plugin/underscore.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/js/pikeadmin.js') }}" type="text/javascript"></script>
 {{-- <script src="{{ asset('assets/textwlookup.js') }}" type="text/javascript"></script> --}}
 <script type="text/javascript">
@@ -158,10 +144,45 @@
 		})
         //init datepicker
         $('.datepicker').datepicker({
-            format: 'dd/mm/yyyy',
+            //format: 'dd/mm/yyyy',
+            format: 'yyyy-mm-dd',
             clearBtn:true,
         });
-        
+        //init textwselect
+        $('.xxmselect2').select2({
+            theme: "bootstrap",
+            /*ajax: {
+                url: 'http://localhost/lav7_PikeAdmin/'+api,
+                dataType: 'json',
+            },*/
+            templateResult: function (dat) {
+                var r = [dat.id, dat.text];
+                var $result = $(
+                    '<div class="row">' +
+                    '<div class="col-md-3">' + r[0] + '</div>' +
+                    '<div class="col-md-9">' + r[1] + '</div>' +
+                    '</div>'
+                );
+                return $result;
+            },
+            templateSelection: function (dat) {
+                var r = [dat.id, dat.text];
+                var $result = $(
+                    '<div class="row">' +
+                    '<div class="col-md-3">' + r[0] + '</div>' +
+                    '<div class="col-md-9">' + r[1] + '</div>' +
+                    '</div>'
+                );
+                return result;
+            },
+            //matcher: function(term, text) {
+            // TODO: search nya mash belum jalamconsole.log([term, text]);
+            //return text.toUpperCase().indexOf(term.toUpperCase())>=0 || option.val().toUpperCase().indexOf(term.toUpperCase())>=0;
+            //if (text.toUpperCase().indexOf(term.toUpperCase())==0) return true;
+            //return false;
+            //}
+        });
+
         //init select2
         $('.select2').select2({
             theme: "bootstrap",

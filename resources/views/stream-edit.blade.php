@@ -5,30 +5,24 @@
     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
     {{ Form::hidden('jr', 'product') }}  
 
-    <div class='row' style="color:lightgray;">    
-        <div class='col-1'></div>
-        <div class='col-10'>
-            <div class='form-row mb-3 pb-2'>
-                <input name="$input" type="text" class="form-control form-control-sm" placeholder="Write you comment here">
-            </div>
-            <div class='form-row stream'>
-                <img src='{{ asset('assets/images/profile-image/p1.png') }}' alt='profileImage' width='15px' height='15px' class='mt-1' /> 
-                <span class="badge badge-secondary mt-1 mx-1">New</span> <a href='' class='mr-1'>Muhammad Zaenal Mutaqin</a> created this case assigned to <a href='' class='ml-1'>Adinda R</a><br/>
-            </div>
-            <hr class='line-spliter' />
-            <div class='form-row stream'>
-                <img src='{{ asset('assets/images/profile-image/p1.png') }}' alt='profileImage' width='15px' height='15px' class='mt-1' /> 
-                <span class="badge badge-secondary mt-1 mx-1">New</span> <a href='' class='mr-1'>Muhammad Zaenal Mutaqin</a> created this case assigned to <a href='' class='ml-1'>Adinda R</a><br/>
-            </div>
-            <hr class='line-spliter' />
-            <div class='form-row stream'>
-                <img src='{{ asset('assets/images/profile-image/p1.png') }}' alt='profileImage' width='15px' height='15px' class='mt-1' /> 
-                <span class="badge badge-secondary mt-1 mx-1">New</span> <a href='' class='mr-1'>Muhammad Zaenal Mutaqin</a> created this case assigned to <a href='' class='ml-1'>Adinda R</a><br/>
-            </div>
-            <hr class='line-spliter' />
+    {{-- Card --}}
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3><i class="fa fa-check-square-o"></i> Stream</h3>
         </div>
-        <div class='col-1'></div>
-    </div>
+        <div class="card-body">
+            <div class='form-row'>
+                <div class="form-group col">
+                    <label>Name *</label>
+                    <input name="$input" type="text" class="form-control form-control-sm">
+                </div>
+                <div class="form-group col">
+                    <label>$label</label>
+                    <input name="$input" type="text" class="form-control form-control-sm">
+                </div>
+            </div>
+        </div>
+    </div><!-- end card-->
     
     </form>
 @stop

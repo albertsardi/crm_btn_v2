@@ -20,21 +20,17 @@ class CalendarController extends MainController {
     function edit($id='') {
         $data = [
             'id'        => $id,
-            'captions'   => 'Calender > '. (($id=='')? 'create':'edit'),
             'caption'   => 'Calendar Edit',
             'select'    => $this->selectData(['common:gender']),
             'data'      => []
         ];
 
         //get data
-        //dd('ddd');
-        //$res = $this->api('GET', "api/calendar/$id");
-        //dd($res);
-        /*if(!empty($res)) {
+        $res = $this->api('GET', "api/calendar/$id");
+        if(!empty($res)) {
             $data['data'] = $res;
-        }*/
+        }
     
-        $data = [];
         return view('calendar-edit', $data);
     }
 

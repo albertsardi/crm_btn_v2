@@ -18,30 +18,32 @@ class AccountController extends MainController {
 
     //form edit
     function edit($id='') {
-        /*
-        $lookup = [];
-        $res = $this->api('GET', "api/user");
-        if(!empty($res)) {
-            $lookup['user'] = $this->createLookGrid($res, '', '', 'user', 'table table-dark');
-        } else {
-            $lookup['user'] = [];
-        }
-        */
-        
+        //$data['modal']= ''; $data['jsmodal']= '';
+        //require 'helper_database.php';
+        //require 'helper_table.php';
+        //require 'helper_formjq.php';
+        //require 'helper_lookup.php';
+        //$cn=db_connect();
+        //$id=isset($_GET['id'])?$_GET['id']:'BENANG-KARET';
+        //dd($_SERVER);
         $data = [
             'id'        => $id,
-            'caption'   => 'Account > '. (($id=='')? 'create':'edit'),
-            'select'    => $this->selectData(['common:education', 'common:gender', 'common:religion', 'common:occupation', 'common:maritalstatus', 'common:source_income', 'common:source_income_additional', 'common:gross_income_yearly', 'common:expense_monthly', 'common:objective_investment' ]),
-            'lookup'    => $this->lookData(['user']),
+            'caption'   => ($id=='')? 'Account > create':'Account > edit',
+            'select'    => $this->selectData(['common:education', 'common:gender', 'common:religion', 'common:occupation', 'common:maritalstatus']),
+            'data'      => []
         ];
+        //dd($data);
 
         //get data
         $res = $this->api('GET', "api/account/$id");
+        //$res = $this->api('GET', "api/account/63eaf2ae8b449b42b");
         if(!empty($res)) {
             $data['data'] = $res;
+            //$data['mOrder'] = Order::where('AccCode',$res->data->AccCode)->get();
         }
     
         return view('account-edit', $data);
     }
+
 
 }

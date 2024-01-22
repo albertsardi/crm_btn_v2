@@ -20,9 +20,8 @@ class MeetingController extends MainController {
     function edit($id='') {
         $data = [
             'id'        => $id,
-            'caption'   => 'Meeting > '. (($id=='')? 'create':'edit'),
-            'select'    => $this->selectData(['common:gender', 'common:meet_status', 'common:duration', 'common:repeat_type']),
-            'lookup'    => $this->lookData(['user']),
+            'caption'   => 'Meeting Edit',
+            'select'    => $this->selectData(['common:gender']),
             'data'      => []
         ];
 

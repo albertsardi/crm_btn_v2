@@ -1,21 +1,12 @@
 @extends('temp-master')
 
-@section('css')
-    <style>
-    .calendar {overflow:scroll;}
-    </style>
-    <link rel="stylesheet" href="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.css" />
-    
-@stop
-
-
 @section('content')
     <form id='formData'>
     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-    {{-- {{ Form::hidden('jr', 'product') }}   --}}
+    {{ Form::hidden('jr', 'product') }}  
 
     {{-- Card --}}
-    <div class="card mb-3 style="background-color:white;">
+    <div class="card mb-3">
         <div class="card-header">
             <h3><i class="fa fa-check-square-o"></i> Calendar</h3>
         </div>
@@ -30,27 +21,6 @@
                     <input name="$input" type="text" class="form-control form-control-sm">
                 </div>
             </div>
-
-            <div class='form-row'>
-            [calendar]
-            <div class='calender d-none' style='width:100px;'>
-                <table class='table table-bordered'>
-                <?php
-                for($r=1;$r<=6;$r++) {
-                    echo "<tr style='height:50px;'>";
-                    for($c=1;$c<=18;$c++) {
-                        echo "<td style='width:50px;'>$c</td>";
-                    }
-                    echo '</tr>';
-                }
-                ?>
-                </table>
-            </div>
-            [CAL]
-            </div>
-
-            <div id="calendar" style="height:800px;background-color:white;"></div>
-        
         </div>
     </div><!-- end card-->
     
@@ -61,7 +31,6 @@
 @stop
                     
 @section('js')
-    <script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js"></script>
     <script>
         $(document).ready(function() {
            //init page
@@ -70,34 +39,23 @@
            
             //save data
             $("button#cmSave").click(async function(e){ //using ajax
-                
-            });
-
-            //init calendar
-            const calendar = new Calendar('#calendar', {
-                defaultView: 'week',
-                template: {
-                    time(event) {
-                    const { start, end, title } = event;
-
-                    return `<span style="color: white;">${formatTime(start)}~${formatTime(end)} ${title}</span>`;
-                    },
-                    allday(event) {
-                    return `<span style="color: gray;">${event.title}</span>`;
-                    },
-                },
-                calendars: [
-                    {
-                    id: 'cal1',
-                    name: 'Personal',
-                    backgroundColor: '#03bd9e',
-                    },
-                    {
-                    id: 'cal2',
-                    name: 'Work',
-                    backgroundColor: '#00a9ff',
-                    },
-                ],
+                e.preventDefault();
+                var formdata=$('form').serialize();
+                var id = '{{$id}}';
+                var resp = await axios.post(window.API_URL+"/api/calendar/save/"+id, formdata);
+                console.log(resp)
+                if (resp.status==200) {
+                    console.log(resp.data)
+                    if (resp.data.status=='Error') {
+                        alert('Error:: '+resp.data.message);
+                    } else {
+                        alert('datasave.');
+                        if (id=='new' || id=='') window.location.href = window.location.href.replace("/new", "/"+resp.data.data.id);
+                    }
+                } else {
+                    alert('Error')
+                    console.log(resp)
+                }
             });
         });
         

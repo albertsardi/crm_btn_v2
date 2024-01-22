@@ -20,9 +20,8 @@ class CallsController extends MainController {
     function edit($id='') {
         $data = [
             'id'        => $id,
-            'caption'   => 'Calls > '. (($id=='')? 'create':'edit'),
-            'select'    => $this->selectData(['common:call_status', 'common:direction', 'common:duration', 'common:repeat_type']),
-            'lookup'    => $this->lookData(['user']),
+            'caption'   => 'Calls Edit',
+            'select'    => $this->selectData(['common:gender']),
             'data'      => []
         ];
 

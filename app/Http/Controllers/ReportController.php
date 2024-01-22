@@ -34,9 +34,5 @@ class ReportController extends MainController {
         return view('report-edit', $data);
     }
 
-    // for dashboard chart
-    function summaryopportunity() {
-        
-    }
 
 }

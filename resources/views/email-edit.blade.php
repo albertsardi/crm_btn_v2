@@ -33,7 +33,7 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            //init page
+           //init page
             //$(':input[type=number]').on('mousewheel',function(e){ $(this).blur();  });
             //$('select.select2').select2({ theme: "bootstrap" });
            
@@ -42,8 +42,8 @@
                 e.preventDefault();
                 var formdata=$('form').serialize();
                 var id = '{{$id}}';
-                var resp = await axios.post("{{env('API_URL')}}/api/email/save/"+id, formdata);
-                //console.log(resp)
+                var resp = await axios.post(window.API_URL+"/api/email/save/"+id, formdata);
+                console.log(resp)
                 if (resp.status==200) {
                     console.log(resp.data)
                     if (resp.data.status=='Error') {

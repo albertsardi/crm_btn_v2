@@ -18,19 +18,10 @@ class TaskController extends MainController {
 
     //form edit
     function edit($id='') {
-        $lookup = [];
-        $res = $this->api('GET', "api/user");
-        if(!empty($res)) {
-            $lookup['user'] = $this->createLookGrid($res, '', '', 'user', 'table table-dark');
-        } else {
-            $lookup['user'] = [];
-        }
-
         $data = [
             'id'        => $id,
-            'caption'   => 'Task > '. (($id=='')? 'create':'edit'),
-            'select'    => $this->selectData(['common:task_status', 'common:priority']),
-            'lookup'    => $lookup,
+            'caption'   => 'Task Edit',
+            'select'    => $this->selectData(['common:gender']),
             'data'      => []
         ];
 

@@ -20,7 +20,7 @@ class EmailController extends MainController {
     function edit($id='') {
         $data = [
             'id'        => $id,
-            'caption'   => 'Email > '. (($id=='')? 'create':'edit'),
+            'caption'   => 'Email Edit',
             'select'    => $this->selectData(['common:gender']),
             'data'      => []
         ];

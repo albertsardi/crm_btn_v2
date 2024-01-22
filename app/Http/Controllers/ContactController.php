@@ -20,22 +20,16 @@ class ContactController extends MainController {
     function edit($id='') {
         $data = [
             'id'        => $id,
-            'caption'   => 'Contact > '. (($id=='')? 'create':'edit'),
-            'select'    => $this->selectData(['common:gender', 'common:salutation_name', 'common:customer_category', 'common:id_type', 'common:fbi_percentage', 'common:probability', 'common:lead_source']),
-            'lookup'    => $this->lookData(['user']),
+            'caption'   => 'Contact Edit',
+            'select'    => $this->selectData(['common:gender']),
             'data'      => []
-        ];
-        $data['modal'] = (object)[
-            'email' =>  $this->api('GET', "api/email_address/" . $id),
-            'phone' =>  $this->api('GET', "api/phone_number/" . $id),
         ];
 
         //get data
-        $res = $this->api('GET', "api/lead/$id");
+        $res = $this->api('GET', "api/contact/$id");
         if(!empty($res)) {
             $data['data'] = $res;
         }
-        dump($data);
     
         return view('contact-edit', $data);
     }

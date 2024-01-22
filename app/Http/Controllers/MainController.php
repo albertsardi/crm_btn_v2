@@ -56,7 +56,6 @@ class MainController extends Controller {
 			//dd( $base_url.$url);
 
 			$api = $client->request($type, $base_url.$url); //ini yang jalan
-			//return dd($base_url.$url);
 			$res    = json_decode($api->getBody());
 
 			//$client = new GuzzleHttp\Client(['base_uri' => 'http://localhost:8000']);
@@ -88,42 +87,30 @@ class MainController extends Controller {
 		return $base_url.$api;
 	}
 	
-	function lookData($arr) {
-		$out = [];
-		foreach($arr as $r) {
-			$res = $this->api('GET', "api/" . $r);
-			if(!empty($res)) {
-				$out[$r] = $this->createLookGrid($res, '', '', 'user', 'table table-dark');
-			} else {
-				$out[$r] = '[no data]';
-			}
-		}
-		return $out;		
-	}
 
-	// function modalData($modal) {
-	// 	$data = [];
-	// 	if(in_array('mCat', $modal)) $data['mCat'] = $this->DB_list('masterproductcategory', 'Category');
-	// 	if(in_array('mCustomer', $modal)) $data['mCustomer'] = DB::table('masteraccount')->where('AccType', 'C')->get();
-	// 	if(in_array('mSupplier', $modal)) $data['mSupplier'] = DB::table('masteraccount')->select('AccCode','AccName','Category')->where('AccType', 'S')->get();
-	// 	if(in_array('mProduct', $modal)) $data['mProduct'] = json_encode(DB::table('masterproduct')->select('Code','Name','Category')->where('ActiveProduct',1)->get());
-	// 	if(in_array('mPurchaseQuotation', $modal)) $data['mPurchaseQuotation'] = ['Raw material','Finish good'];
-	// 	if(in_array('mWarehouse', $modal)) $data['mWarehouse'] = $this->DB_list('masterwarehouse', ['warehouse','warehousename']); //DB::table('masterwarehouse')->select('warehouse','warehousename')->get(),
-	// 	// if(in_array('mPayType', $modal)) $data['mPayType'] =  $this->DB_list('common',['id','name1'], "category='Payment' "); //Common::getData('Payment')->data,
-	// 	if(in_array('mPayType', $modal)) $data['mPayType'] =  DB::table('common')->select('id','name1')->where('category','Payment')->get(); //Common::getData('Payment')->data,
-	// 	//if(in_array('mSalesman', $modal)) $data['mSalesman'] = $this->DB_list('mastersalesman', 'Name');
-	// 	if(in_array('mSalesman', $modal)) $data['mSalesman'] = DB::table('mastersalesman')->select('Code','Name')->get();
-	// 	if(in_array('mAddr', $modal)) $data['mAddr'] = []; //json_encode(DB::table('masteraccount')->where('AccCode', 'C')->get() ),
-	// 	if(in_array('mCat', $modal)) $data['mCat'] = $this->DB_list('masterproductcategory', 'Category');
-	// 	if(in_array('mAccount', $modal)) $data['mAccount'] = json_encode(db::table('mastercoa')->select('AccNo','AccName','CatName')->get() );
-	// 	if(in_array('mDO', $modal)) $data['mDO'] = [];
-	// 	if(in_array('mSO', $modal)) $data['mSO'] = DB::table('orderhead')->select('TransNo','TransDate','Total','AccCode','AccName','DeliveryTo')
-	// 					->whereRaw("left(TransNo,2)='SO' ")->where("Status", "1")
-	// 					->orderBy('TransDate', 'desc')->get();
-	// 	if(in_array('mInvUnpaid', $modal)) $data['mInvUnpaid'] = json_encode(Invoice::select('TransNo','TransDate')->get() );
+	function modalData($modal) {
+		$data = [];
+		if(in_array('mCat', $modal)) $data['mCat'] = $this->DB_list('masterproductcategory', 'Category');
+		if(in_array('mCustomer', $modal)) $data['mCustomer'] = DB::table('masteraccount')->where('AccType', 'C')->get();
+		if(in_array('mSupplier', $modal)) $data['mSupplier'] = DB::table('masteraccount')->select('AccCode','AccName','Category')->where('AccType', 'S')->get();
+		if(in_array('mProduct', $modal)) $data['mProduct'] = json_encode(DB::table('masterproduct')->select('Code','Name','Category')->where('ActiveProduct',1)->get());
+		if(in_array('mPurchaseQuotation', $modal)) $data['mPurchaseQuotation'] = ['Raw material','Finish good'];
+		if(in_array('mWarehouse', $modal)) $data['mWarehouse'] = $this->DB_list('masterwarehouse', ['warehouse','warehousename']); //DB::table('masterwarehouse')->select('warehouse','warehousename')->get(),
+		// if(in_array('mPayType', $modal)) $data['mPayType'] =  $this->DB_list('common',['id','name1'], "category='Payment' "); //Common::getData('Payment')->data,
+		if(in_array('mPayType', $modal)) $data['mPayType'] =  DB::table('common')->select('id','name1')->where('category','Payment')->get(); //Common::getData('Payment')->data,
+		//if(in_array('mSalesman', $modal)) $data['mSalesman'] = $this->DB_list('mastersalesman', 'Name');
+		if(in_array('mSalesman', $modal)) $data['mSalesman'] = DB::table('mastersalesman')->select('Code','Name')->get();
+		if(in_array('mAddr', $modal)) $data['mAddr'] = []; //json_encode(DB::table('masteraccount')->where('AccCode', 'C')->get() ),
+		if(in_array('mCat', $modal)) $data['mCat'] = $this->DB_list('masterproductcategory', 'Category');
+		if(in_array('mAccount', $modal)) $data['mAccount'] = json_encode(db::table('mastercoa')->select('AccNo','AccName','CatName')->get() );
+		if(in_array('mDO', $modal)) $data['mDO'] = [];
+		if(in_array('mSO', $modal)) $data['mSO'] = DB::table('orderhead')->select('TransNo','TransDate','Total','AccCode','AccName','DeliveryTo')
+						->whereRaw("left(TransNo,2)='SO' ")->where("Status", "1")
+						->orderBy('TransDate', 'desc')->get();
+		if(in_array('mInvUnpaid', $modal)) $data['mInvUnpaid'] = json_encode(Invoice::select('TransNo','TransDate')->get() );
 					
-	// 	return $data;
-	// }
+		return $data;
+	}
 
 	// function selectData($arr) {
 	// 	$out = [];
@@ -182,7 +169,7 @@ class MainController extends Controller {
 						$rr = explode(':', $r); 
 						$type = $rr[1];
 						$dat = [];
-						$res = $this->api('GET', "api/common/$type");
+						$res = $this->api('GET', "api/common?category=$type");
 						if(!empty($res)) {
 							foreach($res as $r) {
 								$dat[] = ['id'=>$r->opttext, 'text'=>$r->opttext];
@@ -196,89 +183,6 @@ class MainController extends Controller {
 		return (object)$out;		
 	}
 
-	function createListGrid($data, $gridcol, $gridcaption, $jr, $class='') {
-        if ($class!='') $class="class='$class' ";
-
-        $caption = '<tr>';
-        foreach($gridcaption as $col) {
-            $caption.= "<th>".($col??'')."</th>";
-        }
-        $caption.= "</tr>";
-
-        if (!empty($data)) {
-            $tdata = '';
-            foreach($data as $r) {
-                $tdata.= '<tr>';
-                $r = (array)$r; 
-                foreach($gridcol as $idx=>$c) {
-                    $v = $r[$c]??'';
-                    $id = $r['id']??'';
-                    if($idx==0) $v = "<a href='".url('/'."$jr/$id")."'>$v</a>";
-                    if($c=='#assigned_user') $v = "<a href='".($r['assigned_user_id']??'')."'>".($r['assigned_user_name']??'')."</a>";
-                    if($c=='#account') $v = "<a href='".url('account').'/'.($r['account_id']??'')."'>".($r['account_name']??'')."</a>";
-                    $tdata.= "<td>".$v."</td>";
-                }
-                $btn = "<button type='button' class='btn btn-dropdown dropdown-toggle dropdown-toggle-split' data-toggle='dropdown' aria-expanded='false' data-reference='parent'></button>
-                            <div class='dropdown-menu'>
-                                <a class='dropdown-item' href='".url('/')."/account/$r[id]'>Edit</a>
-                                <button class='dropdown-item cmDel' data-id='$r[id]' href='".url('/')."/account/delete/$r[id]'>Delete</button>
-                            </div>    ";
-                $tdata.= "<td> $btn </td>";
-                $tdata.= '</tr>';
-            }
-        } else {
-            $tdata = "<tr><td class='text-center' colspan='".count($gridcol)."'>no data</td></tr>";
-        }
-
-        $out = "<table id='list-table' $class>
-                <thead>
-                $caption
-                </thead>
-                <tbody>
-                $tdata
-                </tbody>
-                </table>";
-        return $out;
-    }
-
-	function createLookGrid($data, $gridcol='', $gridcaption='', $jr, $class='') {
-        if ($class!='') $class="class='$class' ";
-		$gridcaption    = ['Name', 'User Name','Email', 'Roles'];
-        $gridcol        = ['name', 'user_name','email', 'role_name'];
-
-        $caption = '<tr>';
-        foreach($gridcaption as $col) {
-            $caption.= "<th>".($col??'')."</th>";
-        }
-        $caption.= "</tr>";
-
-        if (!empty($data)) {
-            $tdata = '';
-            foreach($data as $r) {
-                $tdata.= '<tr>';
-                $r = (array)$r; 
-                foreach($gridcol as $idx=>$c) {
-                    $v = $r[$c]??'';
-                    $id = $r['id']??'';
-					if($idx==0) $v = "<a href='' data-item='$r[id]|$r[name]' class='lookup_item'>$v</a>";
-                    $tdata.= "<td>".$v."</td>";
-                }
-                $tdata.= '</tr>';
-            }
-        } else {
-            $tdata = "<tr><td class='text-center' colspan='".count($gridcol)."'>no data</td></tr>";
-        }
-
-        $out = "<table id='list-table' $class>
-                <thead>
-                $caption
-                </thead>
-                <tbody>
-                $tdata
-                </tbody>
-                </table>";
-        return $out;
-    }
 	
 	//func image
 	function profile_image($img) {

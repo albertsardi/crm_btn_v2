@@ -1,9 +1,4 @@
 @extends('temp-master')
-@section('css')
-    <style>
-    
-    </style>
-@stop
 
 @section('content')
     {{ Form::hidden('jr', 'dashboard') }}   
@@ -55,6 +50,7 @@
                         Total product sold by amount in this year period. Can see each item sold ad profit.
                     </div>
                     <div class="card-body">
+                        <canvas id="lineChart"></canvas>
                     </div>
                     <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                 </div><!-- end card-->
@@ -64,11 +60,11 @@
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">						
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h3><i class="fa fa-bar-chart-o"></i> Summary Leads</h3>
+                        <h3><i class="fa fa-bar-chart-o"></i> Product Sold by Category</h3>
                         Total product sold by each category in this year period.
                     </div>
                     <div class="card-body">
-                        <div id="barchart1"></div>
+                        <canvas id="pieChart"></canvas>
                     </div>
                     <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                 </div><!-- end card-->
@@ -82,11 +78,10 @@
                         Top 5 big buyer customers in this year period.
                     </div>
                     <div class="card-body">
-                        {{-- <canvas id="doughnutChart"></canvas>
+                        <canvas id="doughnutChart"></canvas>
                         <div class='position-absolute' style='top:55%;left:0%;width:100%;'>
                             <p class='text-center'>70%</p>
-                        </div> --}}
-                        <div id="barchart2"></div>
+                        </div>
                     </div>
                     <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                 </div><!-- end card-->
@@ -296,143 +291,12 @@
 @stop
                     
 @section('js')
-    {{-- <script src="https://d3js.org/d3.v7.min.js"></script> --}}
-    {{-- <script src="{{ asset('assets/plugin/c3/c3.min.js') }}" type="text/javascript"></script> --}}
-    <script src="https://code.highcharts.com/highcharts.js"></script>
     <script>
-        $(document).ready(async function() {
-            var chart = Highcharts.chart('barchart1', {
-                chart: { type: 'column',backgroundColor:'#00' },
-                title: { text: ' ' },
-                {{-- title: {
-                    text: 'Monthly Average Rainfall'
-                },
-                subtitle: {
-                    text: 'Source: WorldClimate.com'
-                }, --}}
-                
-                xAxis: {
-                    categories: [
-                        'Converted',
-                        'In Process',
-                        'New',
-                        'Assigned',
-                        'Closed',
-                        'Duplicate',
-                        'Pending',
-                        'Rejected',
-                    ],
-                    crosshair: true
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Leads'
-                    }
-                },
-                tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                        '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0
-                    }
-                },
-                series: [{
-                    name: 'Leads Amount',
-                    //data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4,194.1, 95.6, 54.4]
-                    //data: []
-                    data:[{name:'Converted',y:120},{name:'name2',y:110}]
-
-                }, ]
-            });
-            // load data for bar chart
-            var resp = await loaddata('summarylead');
-            console.log(resp)
-            var datatext = _.pluck(resp, 'STATUS')
-            var data = _.pluck(resp, 'tot')
-            console.log(datatext)
-
-            //barchart2
-            var chart = Highcharts.chart('barchart2', {
-                chart: { type: 'column',backgroundColor:'#00' },
-                title: { text: ' ' },
-                xAxis: {
-                    categories: [
-                        'Converted',
-                        'In Process',
-                        'New',
-                        'Assigned',
-                        'Closed',
-                        'Duplicate',
-                        'Pending',
-                        'Rejected',
-                    ],
-                    crosshair: true
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Leads'
-                    }
-                },
-                tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                        '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0
-                    }
-                },
-                series: [{
-                    name: 'Leads Amount',
-                    //data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4,194.1, 95.6, 54.4]
-                    //data: []
-                    data:[{name:'Converted',y:120},{name:'name2',y:110}]
-
-                }, ]
-            });
-            // load data for chart
-            var resp = await loaddata('summaryopportunity');
-            console.log(resp)
-            var datatext = _.pluck(resp, 'STATUS')
-            var data = _.pluck(resp, 'tot')
-            console.log(datatext)
-            
-            
-            /*chart.series[0].update({
-                name: 'Jakarta',
-                //data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4,194.1, 95.6, 54.4]
-                data: data
-            });
-            chart.xAxis.update({
-                categories: datatext
-            });
-            */
-
-            });
-
-    loaddata =  async function(jr) {
-        var res = await axios.get("{{env('API_URL')}}/api/report/"+jr);
-        if (res.status=200) return res.data;
-    }
+        $(document).ready(function() {
+           
+        });
 
         
     </script>
-
-    
-    
 @stop
 

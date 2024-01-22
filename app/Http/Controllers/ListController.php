@@ -15,14 +15,12 @@ use App\Http\Model\Product;
 use Session;
 
 class ListController extends MainController {
-    var $cur = 'Rp';
 
     //data list
     function datalist($jr) {
         $data = [
             'jr'        => $jr,
         ];
-        $view = 'datalist';
 
         switch($jr) {
             case 'account':
@@ -33,47 +31,45 @@ class ListController extends MainController {
             case 'contact':
                 $data['caption']    = 'Contacts';
                 $gridcaption        = ['Name', 'Account', 'Email', 'Phone'];
-                $gridcol          = ['name', 'account', 'email_address', 'phone_number'];
+                $gridcol          = ['name', 'Account', 'Email', 'Phone'];
                 break;
             case 'lead':
                 $data['caption']    = 'Leads';
                 $gridcaption        = ['Name', 'Status', 'Assigned User', 'Create At', 'Lead Age'];
-                $gridcol            = ['name', 'status', '#assigned_user', 'created_at', 'lead_age'];
+                $gridcol            = ['name', 'status', 'assigned_user_id', 'created_at', 'modified_at'];
                 break;
             case 'opportunity':
                 $data['caption']    = 'Opportunities';
                 $gridcaption        = ['Opportunity', 'Account ID', 'Sales Stage', 'Opportunity ID', 'Assigned User', 'Amount', 'Created At', 'Duration'];
-                $gridcol            = ['name', '#account', 'stage', 'opportunity_id', '#assigned_user', 'amount', 'created_at', 'modified_at'];
+                $gridcol            = ['name', 'account_id', 'aales_stage', 'opportunity_id', 'assigned_user_id', 'amount', 'created_at', 'modified_at'];
                 break;
             case 'case':
                 $data['caption']    = 'Cases';
                 $gridcaption        = ['Name', 'Number', 'Status', 'Priority', 'Account', 'Assigned User'];
-                $gridcol            = ['name', 'number', 'status', 'priority', 'account_id', '#assigned_user'];
+                $gridcol            = ['name', 'number', 'status', 'priority', 'account_id', 'assigned_user_id'];
                 break;
             //case 'email':
                 //$caption        = 'Emails';
                 //$gridcaption    = [];
                 //break;
-            case 'calendar':
-                $caption        = 'Calendar';
-                $gridcaption    = [];
-                $view = 'calendar-edit';
-                break;
+            //case 'calendar':
+                //$caption        = 'Calendar';
+                //$gridcaption    = [];
+                //break;
             case 'meeting':
                 $data['caption']    = 'Meetings';
                 $gridcaption        = ['Subject Name', 'Parent', 'Status', 'Date Start', 'Assigned User'];
-                $gridcol            = ['name', 'parent', 'status', 'date_start', '#assigned_user'];
+                $gridcol            = ['name', 'parent_id', 'status', 'date_start', 'assigned_user_id'];
                 break;
             case 'call':
                 $data['caption']    = 'Calls';
                 $gridcaption        = ['Subject Name', 'Parent', 'Status', 'Date Start', 'Assigned User'];
-                $gridcol            = ['name', 'parent_id', 'status', 'date_start', '#assigned_user'];
+                $gridcol            = ['name', 'parent_id', 'status', 'date_start', 'assigned_user_id'];
                 break;
             case 'task':
                 $data['caption']    = 'Tasks';
                 $gridcaption        = ['Name', 'Status', 'Priority', 'Date Due', 'Assigned User', 'Created At'];
-                //$gridcol            = ['name', 'status', 'priority', 'date_start', 'assigned_user_name', 'created_at'];
-                $gridcol            = ['name', 'status', 'priority', 'date_start', '#assigned_user', 'created_at'];
+                $gridcol            = ['name', 'status', 'priority', 'date_start', 'assigned_user_id', 'created_at'];
                 break;
             //case 'stream':
                 //$caption = 'Stream';
@@ -84,39 +80,52 @@ class ListController extends MainController {
                 $gridcaption        = ['Name', 'Enity Type', 'Type'];
                 $gridcol            = ['name', 'enity_type', 'type'];
                 break;
-            default:
-                return view($jr.'-edit', ['caption'=>'Stream']);
         }
         
-        if($view=='datalist') {
-            //get data
-            $grid = [];
-            $res = $this->api('GET', "api/account");
-            $res = $this->gridModifiedValue($jr, $res);
-            $data['grid'] = $this->createListGrid($res, $gridcol, $gridcaption, $jr, 'table table-dark table-datalist');
-        
-            
-        } else {
-            //return view
-        }
-        return view($view, $data);
+        //get data
+        $grid = [];
+        $res = $this->api('GET', "api/$jr");
+        $data['grid'] = $this->createGrid($res, $gridcol, $gridcaption, $jr, 'table table-dark table-datalist');
+    
+        return view('datalist', $data);
     }
 
-    function gridModifiedValue($jr, $res) {
-        if (empty($res)) return $res;
-        
-        foreach($res as $r) {
-            $r->created_at = date('d M Y h:i', strtotime($r->created_at));
+    function createGrid($data, $gridcol, $gridcaption, $jr, $class='') {
+        if ($class!='') $class="class='$class' ";
 
-            if ($jr=='lead') {
-                $r->lead_age = $r->lead_age.' day(s)';
-            }
-            if ($jr=='opportunity') {
-                $r->amount = $this->cur . number_format($r->amount,2);
-            }
+        $caption = '<tr>';
+        foreach($gridcaption as $col) {
+            $caption.= "<th>".($col??'')."</th>";
         }
-        
-        return $res;
+        $caption.= "</tr>";
+
+        dump($jr);
+        if (!empty($data)) {
+            $tdata = '';
+            foreach($data as $r) {
+                $tdata.= '<tr>';
+                $r = (array)$r; 
+                foreach($gridcol as $idx=>$c) {
+                    $v = $r[$c]??'';
+                    $id = $r['id']??'';
+                    if($idx==0) $v="<a href='".url('/'."$jr/$id")."'>$v</a>";
+                    $tdata.= "<td>".$v."</td>";
+                }
+                $tdata.= '</tr>';
+            }
+        } else {
+            $tdata = "<tr><td class='text-center' colspan='".count($gridcol)."'>no data</td></tr>";
+        }
+
+        $out = "<table id='list-table' $class>
+                <thead>
+                $caption
+                </thead>
+                <tbody>
+                $tdata
+                </tbody>
+                </table>";
+        return $out;
     }
 
 }

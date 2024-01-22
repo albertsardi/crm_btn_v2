@@ -20,9 +20,8 @@ class OpportunityController extends MainController {
     function edit($id='') {
         $data = [
             'id'        => $id,
-            'caption'   => 'Opportunity > '. (($id=='')? 'create':'edit'),
-            'select'    => $this->selectData(['common:gender', 'common:product_category', 'common:opportunity_type', 'common:sales_stage', 'common:probability', 'common:opportunity_status'  ]),
-            'lookup'    => $this->lookData(['user']),
+            'caption'   => 'Opportunity Edit',
+            'select'    => $this->selectData(['common:gender']),
             'data'      => []
         ];
 
